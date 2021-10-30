@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 import chalk from "chalk"
-import { Spinner } from "cli-spinner"
 import { Command } from "commander"
+import ora from "ora"
 import { generateVanityAddress } from "./address"
 
-const spinner = new Spinner(chalk.green("%s Generating..."))
-spinner.setSpinnerString("⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏")
+const spinner = ora("Generating addresses...")
+// spinner.setSpinnerString("⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏")
 
 const program = new Command()
 program
@@ -27,7 +27,10 @@ if (!verbose) {
   spinner.start()
 }
 
+const startTime = Date.now()
 generateVanityAddress({ verbose, prefix, suffix }, (err, keypair) => {
+  const endTime = Date.now()
+  console.log("Total time:", endTime - startTime, "ms")
   if (err || !keypair) {
     console.error(err)
     process.exit(1)

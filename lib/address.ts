@@ -18,10 +18,15 @@ function matches(address: string, { prefix, suffix }: Opts): boolean {
   return prefixMatch && suffixMatch
 }
 
-export async function generateVanityAddress(
+export function generateVanityAddress(
   { verbose, prefix, suffix }: Opts,
-  callback: Callback
-): Promise<void> {
+  callback: Callback,
+  remainingAttempts = 1000
+): void {
+  if (remainingAttempts <= 0) {
+    return callback(new Error("Failed to generate vanity address"))
+  }
+
   const keypair = Keypair.generate()
 
   if (verbose) {
@@ -33,6 +38,10 @@ export async function generateVanityAddress(
   }
 
   setTimeout(() => {
-    generateVanityAddress({ verbose, prefix, suffix }, callback)
+    generateVanityAddress(
+      { verbose, prefix, suffix },
+      callback,
+      remainingAttempts - 1
+    )
   }, 0)
 }
