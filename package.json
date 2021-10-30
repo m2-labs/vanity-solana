@@ -2,6 +2,26 @@
   "name": "@m2-labs/solana-vanity-address",
   "version": "1.0.1",
   "description": "Generate a vanity Solana address starting or ending with any letter or phrase.",
+  "license": "ISC",
+  "homepage": "https://github.com/m2-labs/solana-vanity-address",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/m2-labs/solana-vanity-address.git"
+  },
+  "author": {
+    "name": "M2 Labs",
+    "url": "https://m2.xyz"
+  },
+  "contributors": [
+    {
+      "name": "Brice Stacey",
+      "email": "brice@m2.xyz"
+    },
+    {
+      "name": "Matt Venables",
+      "email": "matt@m2.xyz"
+    }
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -15,9 +35,6 @@
     "prepublish": "npm run build",
     "start": "node dist/index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@solana/web3.js": "^1.30.2",
     "chalk": "^4.1.2",
