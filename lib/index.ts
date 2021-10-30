@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import chalk from "chalk"
 import { Spinner } from "cli-spinner"
 import { Command } from "commander"
