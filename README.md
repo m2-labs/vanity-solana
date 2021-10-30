@@ -34,7 +34,7 @@ choose, the longer it will take to find a match.
 
 ## Brought to you by M2 Labs
 
-<img src="https://m2.xyz/github.png" alt="M2 Labs" height="426" />
+<img src="https://m2.xyz/github.png" alt="M2 Labs" width="427" height="94" />
 
 This project is maintained and funded by [M2 Labs](https://m2.xyz), a Web3
 product development studio.
