@@ -16,9 +16,11 @@
   "license": "ISC",
   "dependencies": {
     "@solana/web3.js": "^1.30.2",
+    "cli-spinner": "^0.2.10",
     "commander": "^8.3.0"
   },
   "devDependencies": {
+    "@types/cli-spinner": "^0.2.1",
     "@types/node": "^16.11.6",
     "@typescript-eslint/eslint-plugin": "^5.2.0",
     "@typescript-eslint/parser": "^5.2.0",

@@ -1,7 +1,13 @@
 # Solana Vanity Address Generator
 
-## Getting started
+## Installation
 
 ```
-npm run dev [prefix]
+npm i -g @m2-labs/solana-vanity-address
+```
+
+## Usage
+
+```
+solana-vanity-address <prefix>
 ```

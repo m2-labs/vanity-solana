@@ -1,49 +1,9 @@
-import { Keypair } from "@solana/web3.js"
+import { Spinner } from "cli-spinner"
 import { Command } from "commander"
+import { generateVanityAddress } from "./address"
 
-type Opts = { verbose?: boolean; prefix?: string; suffix?: string }
-
-function matches(address: string, { prefix, suffix }: Opts): boolean {
-  let prefixMatch = true
-  let suffixMatch = true
-
-  if (prefix) {
-    prefixMatch = address.toLowerCase().startsWith(prefix.toLowerCase())
-  }
-
-  if (suffix) {
-    suffixMatch = address.toLowerCase().endsWith(suffix.toLowerCase())
-  }
-
-  return prefixMatch && suffixMatch
-}
-
-async function generateVanityWallet({
-  verbose,
-  prefix,
-  suffix
-}: Opts): Promise<void> {
-  const opts = []
-  if (prefix && prefix.length) opts.push(`prefix "${prefix}"`)
-  if (suffix && suffix.length) opts.push(`suffix "${suffix}"`)
-  console.log(`Generating vanity wallet with ${opts.join(" and ")} ...`)
-
-  let keypair: Keypair
-
-  do {
-    keypair = Keypair.generate()
-    if (verbose) {
-      console.log(`${keypair.publicKey.toBase58()}`)
-    }
-  } while (!matches(keypair.publicKey.toBase58(), { prefix, suffix }))
-
-  console.log("\n\n----")
-  console.log("Public Key:")
-  console.log(keypair.publicKey.toBase58())
-  console.log("\nPrivate Key:")
-  console.log(Buffer.from(keypair.secretKey).toString("hex"))
-  console.log("----")
-}
+const spinner = new Spinner("%s Generating...")
+spinner.setSpinnerString("⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏")
 
 const program = new Command()
 program
@@ -60,4 +20,22 @@ if ((!prefix || !prefix.length) && (!suffix || !suffix.length)) {
   process.exit(1)
 }
 
-generateVanityWallet({ verbose, prefix, suffix })
+if (!verbose) {
+  spinner.start()
+}
+
+generateVanityAddress({ verbose, prefix, suffix }, (err, keypair) => {
+  if (err || !keypair) {
+    console.error(err)
+    process.exit(1)
+  }
+
+  console.log("\n\n----")
+  console.log("Public Key:")
+  console.log(keypair.publicKey.toBase58())
+  console.log("\nPrivate Key:")
+  console.log(Buffer.from(keypair.secretKey).toString("hex"))
+  console.log("----")
+
+  process.exit(0)
+})
