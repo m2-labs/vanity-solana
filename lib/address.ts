@@ -1,9 +1,21 @@
 import { Keypair } from "@solana/web3.js"
 
-type Opts = { verbose?: boolean; prefix?: string; suffix?: string }
-type Callback = (err?: Error | null, keypair?: Keypair) => void
+type Opts = {
+  verbose?: boolean
+  prefix?: string
+  suffix?: string
+  chunkSize: number
+}
 
-function matches(address: string, { prefix, suffix }: Opts): boolean {
+type MatchOpts = {
+  prefix?: string
+  suffix?: string
+}
+
+type UpdateCallback = (count: number) => void
+type FinalCallback = (err?: Error | null, keypair?: Keypair) => void
+
+function matches(address: string, { prefix, suffix }: MatchOpts): boolean {
   let prefixMatch = true
   let suffixMatch = true
 
@@ -19,29 +31,27 @@ function matches(address: string, { prefix, suffix }: Opts): boolean {
 }
 
 export function generateVanityAddress(
-  { verbose, prefix, suffix }: Opts,
-  callback: Callback,
-  remainingAttempts = 1000
+  { verbose, prefix, suffix, chunkSize }: Opts,
+  updateCallback: UpdateCallback,
+  callback: FinalCallback
 ): void {
-  if (remainingAttempts <= 0) {
-    return callback(new Error("Failed to generate vanity address"))
-  }
+  const keypairs = Array.from({ length: chunkSize }, () => Keypair.generate())
 
-  const keypair = Keypair.generate()
+  const keypair = keypairs.find((keypair) =>
+    matches(keypair.publicKey.toBase58(), { prefix, suffix })
+  )
 
-  if (verbose) {
-    console.log(`${keypair.publicKey.toBase58()}`)
-  }
+  updateCallback(chunkSize)
 
-  if (matches(keypair.publicKey.toBase58(), { prefix, suffix })) {
+  if (keypair) {
     callback(null, keypair)
   }
 
   setTimeout(() => {
     generateVanityAddress(
-      { verbose, prefix, suffix },
-      callback,
-      remainingAttempts - 1
+      { verbose, prefix, suffix, chunkSize },
+      updateCallback,
+      callback
     )
   }, 0)
 }
