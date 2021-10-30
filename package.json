@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@solana/web3.js": "^1.30.2",
+    "chalk": "^4.1.2",
     "cli-spinner": "^0.2.10",
     "commander": "^8.3.0"
   },

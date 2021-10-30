@@ -1,8 +1,9 @@
+import chalk from "chalk"
 import { Spinner } from "cli-spinner"
 import { Command } from "commander"
 import { generateVanityAddress } from "./address"
 
-const spinner = new Spinner("%s Generating...")
+const spinner = new Spinner(chalk.green("%s Generating..."))
 spinner.setSpinnerString("⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏")
 
 const program = new Command()
@@ -16,7 +17,7 @@ program.parse(process.argv)
 const { verbose, prefix, suffix } = program.opts()
 
 if ((!prefix || !prefix.length) && (!suffix || !suffix.length)) {
-  console.error("Please specify a --prefix or --suffix")
+  console.error(chalk.red("Please specify a --prefix or --suffix"))
   process.exit(1)
 }
 
@@ -30,12 +31,11 @@ generateVanityAddress({ verbose, prefix, suffix }, (err, keypair) => {
     process.exit(1)
   }
 
-  console.log("\n\n----")
-  console.log("Public Key:")
+  console.log("\n\n")
+  console.log(chalk.underline.blue("Public Key:"))
   console.log(keypair.publicKey.toBase58())
-  console.log("\nPrivate Key:")
+  console.log(chalk.underline.blue("\nPrivate Key:"))
   console.log(Buffer.from(keypair.secretKey).toString("hex"))
-  console.log("----")
 
   process.exit(0)
 })
