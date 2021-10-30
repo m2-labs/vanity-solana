@@ -1,5 +1,7 @@
 # Solana Vanity Address Generator
 
+Generate a vanity Solana address starting or ending with any letter or phrase.
+
 ## Installation
 
 ```
@@ -23,3 +25,14 @@ Options:
   -s, --suffix <suffix>  suffix of the address
   -h, --help             display help for command
 ```
+
+## Note on prefix and suffix length
+
+This tool runs using brute-force, potentially generating thousands or millions
+of addresses before matching your constraints. The longer prefix or suffix you
+choose, the longer it will take to find a match.
+
+## Brought to you by M2 Labs
+
+This project is maintained and funded by [M2 Labs](https://m2.xyz), a Web3
+product development studio.

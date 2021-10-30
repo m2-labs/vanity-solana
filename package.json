@@ -1,7 +1,7 @@
 {
   "name": "@m2-labs/solana-vanity-address",
   "version": "1.0.0",
-  "description": "",
+  "description": "Generate a vanity Solana address starting or ending with any letter or phrase.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
