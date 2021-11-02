@@ -6,6 +6,7 @@ import process from "process"
 import chalk from "chalk"
 import { Command } from "commander"
 import ora from "ora"
+import qrcode from "qrcode-terminal"
 import { generateVanityAddress } from "./vanity-address"
 
 const numCPUs = cpus().length
@@ -28,11 +29,12 @@ const exit = (err?: Error) => {
  * Parse arguments
  */
 const program = new Command()
-const { prefix, suffix, caseSensitive } = program
+const { prefix, suffix, caseSensitive, qrCode } = program
   .name("vanity-solana")
   .option("-p, --prefix <prefix>", "prefix of the address", "")
   .option("-s, --suffix <suffix>", "suffix of the address", "")
   .option("-c, --case-sensitive", "case sensitive vanity address", false)
+  .option("-q, --qr-code", "show a scannable qr code", false)
   .parse(process.argv)
   .opts()
 
@@ -54,6 +56,9 @@ if (cluster.isPrimary) {
         ].join("\n")
 
         spinner.succeed(successMessage)
+        if (qrCode) {
+          qrcode.generate(message.keypair.secretKey, { small: true })
+        }
         exit()
       } else if (message.incrementCounter) {
         addressesGenerated++

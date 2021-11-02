@@ -4,8 +4,9 @@
 
 Generate a Solana address starting or ending with any letter or phrase.
 
-⚡️ Supports multi-core processors<br />
-⚡️ Generates awesome addresses<br />
+⚡️ Supports multi-core processors!<br />
+⚡️ Generates awesome addresses!<br />
+⚡️ QR Codes!<br />
 ⚡️ Solana!
 
 ## Installation
@@ -29,6 +30,7 @@ Options:
   -p, --prefix <prefix>  prefix of the address (default: "")
   -s, --suffix <suffix>  suffix of the address (default: "")
   -c, --case-sensitive   case sensitive vanity address (default: false)
+  -q, --qr-code          show a scannable qr code (default: false)
   -h, --help             display help for command
 ```
 
@@ -56,6 +58,12 @@ Generate an address starting with "A" and ending with "z", case sensitive:
 
 ```sh
 vanity-solana -p A -s z -c
+```
+
+Generate an address and show a qr code to scan
+
+```sh
+vanity-solana -q
 ```
 
 ## Note on prefix and suffix length
