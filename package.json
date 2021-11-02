@@ -1,6 +1,6 @@
 {
   "name": "vanity-solana",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Vanity Solana Address Generator. Generate a Solana address starting or ending with any letter or phrase.",
   "license": "ISC",
   "homepage": "https://github.com/m2-labs/vanity-solana",
