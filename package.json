@@ -4,6 +4,9 @@
   "description": "Generate a vanity Solana address starting or ending with any letter or phrase.",
   "license": "ISC",
   "homepage": "https://github.com/m2-labs/solana-vanity-address",
+  "engines": {
+    "node": ">= 16"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/m2-labs/solana-vanity-address.git"

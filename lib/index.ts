@@ -1,57 +1,86 @@
 #!/usr/bin/env node
 
+import cluster from "cluster"
+import { cpus } from "os"
+import process from "process"
 import chalk from "chalk"
 import { Command } from "commander"
 import ora from "ora"
-import { generateVanityAddress } from "./address"
+import { generateVanityAddress } from "./vanity-address"
 
-const spinner = ora("Generating addresses...")
+const numCPUs = cpus().length
 
+const exit = (err?: Error) => {
+  for (const id in cluster.workers) {
+    const worker = cluster.workers[id]
+    worker?.process.kill()
+  }
+
+  if (err) {
+    console.error(err)
+    process.exit(1)
+  }
+
+  process.exit(0)
+}
+
+/**
+ * Parse arguments
+ */
 const program = new Command()
-const { verbose, prefix, suffix, chunks } = program
-  .option("-p, --prefix <prefix>", "prefix of the address")
-  .option("-s, --suffix <suffix>", "suffix of the address")
-  .option("-c, --chunks <chunks>", "generate addresses in bunches", "100")
-  .option("-v, --verbose", "output all addressees as they are generated")
+const { prefix, suffix } = program
+  .name("solana-vanity-address")
+  .option("-p, --prefix <prefix>", "prefix of the address", "")
+  .option("-s, --suffix <suffix>", "suffix of the address", "")
   .parse(process.argv)
   .opts()
 
-if ((!prefix || !prefix.length) && (!suffix || !suffix.length)) {
-  console.error(chalk.red("Please specify a --prefix or --suffix"))
-  process.exit(1)
-}
+if (cluster.isPrimary) {
+  let addressesGenerated = 0
+  const spinner = ora(`generating vanity address`).start()
 
-const chunkSize = parseInt(chunks, 10)
-if (chunks <= 0) {
-  console.error(chalk.red("Please specify a chunk size > 0"))
-  process.exit(1)
-}
+  for (let i = 0; i < numCPUs; i++) {
+    const childProcess = cluster.fork()
+    childProcess.on("message", function (message) {
+      if (message.keypair) {
+        const successMessage = [
+          `Done after ${addressesGenerated.toLocaleString()} addresses`,
 
-if (!verbose) {
-  spinner.start()
-}
+          chalk.underline.blue("\nPublic Key:"),
+          message.keypair.publicKey,
+          chalk.underline.blue("Private Key:"),
+          message.keypair.secretKey
+        ].join("\n")
 
-const startTime = Date.now()
-let generatedAddresses = 0
-generateVanityAddress(
-  { verbose, prefix, suffix, chunkSize },
-  (newCount) => {
-    generatedAddresses += newCount
-    spinner.text = `Generating addresses (${generatedAddresses})...`
-  },
-  (err, keypair) => {
-    const endTime = Date.now()
-    console.log("Total time:", endTime - startTime, "ms")
-    if (err || !keypair) {
-      console.error(err)
-      process.exit(1)
-    }
-
-    console.log(chalk.underline.blue("\nPublic Key:"))
-    console.log(keypair.publicKey.toBase58())
-    console.log(chalk.underline.blue("\nPrivate Key:"))
-    console.log(Buffer.from(keypair.secretKey).toString("hex"))
-
-    process.exit(0)
+        spinner.succeed(successMessage)
+        exit()
+      } else if (message.counter) {
+        addressesGenerated++
+        spinner.text = `generating vanity address (${addressesGenerated.toLocaleString()})`
+      }
+    })
   }
-)
+} else {
+  /**
+   * Worker Process
+   */
+  const keypair = generateVanityAddress(prefix, suffix, () => {
+    process.send && process.send({ counter: true })
+  })
+
+  if (keypair) {
+    process.send &&
+      process.send({
+        keypair: {
+          raw: keypair,
+          publicKey: keypair.publicKey.toBase58(),
+          secretKey: Buffer.from(keypair.secretKey).toString("hex")
+        }
+      })
+  }
+}
+
+process.stdin.resume()
+process.on("exit", exit.bind({}))
+process.on("SIGINT", exit.bind({}))
+process.on("uncaughtException", exit.bind({}))
