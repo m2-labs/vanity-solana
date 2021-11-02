@@ -1,6 +1,8 @@
-# Solana Vanity Address Generator
+# Vanity Solana
 
-Generate a vanity Solana address starting or ending with any letter or phrase.
+## Vanity Solana Address Generator
+
+Generate a Solana address starting or ending with any letter or phrase.
 
 ⚡️ Supports multi-core processors<br />
 ⚡️ Generates awesome addresses<br />
@@ -9,23 +11,24 @@ Generate a vanity Solana address starting or ending with any letter or phrase.
 ## Installation
 
 ```sh
-npm i -g @m2-labs/solana-vanity-address
+npm i -g vanity-solana
 ```
 
 ## Usage
 
 ```sh
-solana-vanity-address --prefix m --suffix 2
+vanity-solana --prefix m --suffix 2
 ```
 
 ## Options
 
 ```sh
-Usage: solana-vanity-address [options]
+Usage: vanity-solana [options]
 
 Options:
   -p, --prefix <prefix>  prefix of the address (default: "")
   -s, --suffix <suffix>  suffix of the address (default: "")
+  -c, --case-sensitive   case sensitive vanity address (default: false)
   -h, --help             display help for command
 ```
 
@@ -34,19 +37,25 @@ Options:
 Generate an address
 
 ```sh
-solana-vanity-address
+vanity-solana
 ```
 
-Generate an address starting with "aa"
+Generate an address starting with "aa", case insensitive
 
 ```sh
-solana-vanity-address -p aa
+vanity-solana -p aa
 ```
 
-Generate an address ending with "zz"
+Generate an address ending with "zz", case insensitive
 
 ```sh
-solana-vanity-address -s zz
+vanity-solana -s zz
+```
+
+Generate an address starting with "A" and ending with "z", case sensitive:
+
+```sh
+vanity-solana -p A -s z -c
 ```
 
 ## Note on prefix and suffix length

@@ -28,16 +28,17 @@ const exit = (err?: Error) => {
  * Parse arguments
  */
 const program = new Command()
-const { prefix, suffix } = program
-  .name("solana-vanity-address")
+const { prefix, suffix, caseSensitive } = program
+  .name("vanity-solana")
   .option("-p, --prefix <prefix>", "prefix of the address", "")
   .option("-s, --suffix <suffix>", "suffix of the address", "")
+  .option("-c, --case-sensitive", "case sensitive vanity address", false)
   .parse(process.argv)
   .opts()
 
 if (cluster.isPrimary) {
   let addressesGenerated = 0
-  const spinner = ora(`generating vanity address`).start()
+  const spinner = ora(`Generating vanity address`).start()
 
   for (let i = 0; i < numCPUs; i++) {
     const childProcess = cluster.fork()
@@ -56,7 +57,7 @@ if (cluster.isPrimary) {
         exit()
       } else if (message.counter) {
         addressesGenerated++
-        spinner.text = `generating vanity address (${addressesGenerated.toLocaleString()})`
+        spinner.text = `Generating vanity address (${addressesGenerated.toLocaleString()})`
       }
     })
   }
@@ -64,7 +65,7 @@ if (cluster.isPrimary) {
   /**
    * Worker Process
    */
-  const keypair = generateVanityAddress(prefix, suffix, () => {
+  const keypair = generateVanityAddress(prefix, suffix, caseSensitive, () => {
     process.send && process.send({ counter: true })
   })
 

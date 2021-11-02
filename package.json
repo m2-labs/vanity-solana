@@ -1,15 +1,15 @@
 {
-  "name": "@m2-labs/solana-vanity-address",
+  "name": "vanity-solana",
   "version": "1.0.4",
-  "description": "Generate a vanity Solana address starting or ending with any letter or phrase.",
+  "description": "Vanity Solana Address Generator. Generate a Solana address starting or ending with any letter or phrase.",
   "license": "ISC",
-  "homepage": "https://github.com/m2-labs/solana-vanity-address",
+  "homepage": "https://github.com/m2-labs/vanity-solana",
   "engines": {
     "node": ">= 16"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/m2-labs/solana-vanity-address.git"
+    "url": "https://github.com/m2-labs/vanity-solana.git"
   },
   "author": {
     "name": "M2 Labs",
@@ -28,7 +28,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "solana-vanity-address": "./dist/index.js"
+    "vanity-solana": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc",
