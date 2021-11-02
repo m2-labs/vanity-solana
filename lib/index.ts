@@ -38,7 +38,7 @@ const { prefix, suffix, caseSensitive, qrCode } = program
   .parse(process.argv)
   .opts()
 
-if (cluster.isPrimary) {
+if (cluster.isMaster || cluster.isPrimary) {
   let addressesGenerated = 0
   const spinner = ora(`Generating vanity address`).start()
 

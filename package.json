@@ -5,7 +5,7 @@
   "license": "ISC",
   "homepage": "https://github.com/m2-labs/vanity-solana",
   "engines": {
-    "node": ">= 16"
+    "node": ">= 12"
   },
   "repository": {
     "type": "git",
