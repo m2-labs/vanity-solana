@@ -55,7 +55,7 @@ if (cluster.isPrimary) {
 
         spinner.succeed(successMessage)
         exit()
-      } else if (message.counter) {
+      } else if (message.incrementCounter) {
         addressesGenerated++
         spinner.text = `Generating vanity address (${addressesGenerated.toLocaleString()})`
       }
@@ -66,7 +66,7 @@ if (cluster.isPrimary) {
    * Worker Process
    */
   const keypair = generateVanityAddress(prefix, suffix, caseSensitive, () => {
-    process.send && process.send({ counter: true })
+    process.send && process.send({ incrementCounter: true })
   })
 
   if (keypair) {

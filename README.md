@@ -60,9 +60,13 @@ vanity-solana -p A -s z -c
 
 ## Note on prefix and suffix length
 
-This tool runs using brute-force, generating thousands or millions
-of addresses before matching your constraints. The longer prefix or suffix you
-choose, the longer it will take to find a match.
+Most Solana apps will truncate your address, only showing the first and last 4
+characters of your address, so it is not recommended to use longer strings
+than 4 characters.
+
+Also, this tool runs using brute-force, generating thousands or millions
+of addresses before matching your constraints. The longer prefix and/or suffix
+you choose, the longer it will take to find a match.
 
 ## Brought to you by M2 Labs
 

@@ -32,7 +32,7 @@ export const generateVanityAddress = (
   prefix: string,
   suffix: string,
   caseSensitive: boolean,
-  counter: () => void
+  incrementCounter: () => void
 ) => {
   let keypair = Keypair.generate()
 
@@ -44,7 +44,7 @@ export const generateVanityAddress = (
       caseSensitive
     )
   ) {
-    counter()
+    incrementCounter()
     keypair = Keypair.generate()
   }
 
