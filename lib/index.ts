@@ -9,7 +9,8 @@ import ora from "ora"
 import qrcode from "qrcode-terminal"
 import { generateVanityAddress } from "./vanity-address"
 
-const numCPUs = cpus().length
+// Default to half your CPUs
+const numCPUs = Math.max(1, cpus().length / 2)
 
 const exit = (err?: Error) => {
   for (const id in cluster.workers) {
