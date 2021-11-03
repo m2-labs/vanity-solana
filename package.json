@@ -28,7 +28,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "vanity-solana": "./dist/index.js"
+    "vanity-solana": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsc",
