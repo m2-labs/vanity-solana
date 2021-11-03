@@ -31,6 +31,7 @@ Options:
   -s, --suffix <suffix>  suffix of the address (default: "")
   -c, --case-sensitive   case sensitive vanity address (default: false)
   -q, --qr-code          show a scannable qr code (default: false)
+  -w, --workers          number of worker processes to use (default: half the number of CPUs of your system)
   -h, --help             display help for command
 ```
 
@@ -64,6 +65,12 @@ Generate an address and show a qr code to scan
 
 ```sh
 vanity-solana -q
+```
+
+Only use 1 worker process
+
+```sh
+vanity-solana -w 1
 ```
 
 ## Note on prefix and suffix length

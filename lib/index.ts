@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import cluster from "cluster"
-import { cpus } from "os"
+import os from "os"
 import process from "process"
 import chalk from "chalk"
 import { Command } from "commander"
@@ -10,7 +10,7 @@ import qrcode from "qrcode-terminal"
 import { generateVanityAddress } from "./vanity-address"
 
 // Default to half your CPUs
-const numCPUs = Math.max(1, cpus().length / 2)
+const defaultWorkers = Math.max(1, os.cpus().length / 2)
 
 const exit = (err?: Error) => {
   for (const id in cluster.workers) {
@@ -30,20 +30,22 @@ const exit = (err?: Error) => {
  * Parse arguments
  */
 const program = new Command()
-const { prefix, suffix, caseSensitive, qrCode } = program
+const { prefix, suffix, caseSensitive, qrCode, workers } = program
   .name("vanity-solana")
   .option("-p, --prefix <prefix>", "prefix of the address", "")
   .option("-s, --suffix <suffix>", "suffix of the address", "")
   .option("-c, --case-sensitive", "case sensitive vanity address", false)
   .option("-q, --qr-code", "show a scannable qr code", false)
+  .option("-w, --workers <workers>", "number of worker processes to use", defaultWorkers.toString())
   .parse(process.argv)
   .opts()
 
 if (cluster.isMaster || cluster.isPrimary) {
   let addressesGenerated = 0
   const spinner = ora(`Generating vanity address`).start()
+  const numWorkers = Number(workers)
 
-  for (let i = 0; i < numCPUs; i++) {
+  for (let i = 0; i < numWorkers; i++) {
     const childProcess = cluster.fork()
     childProcess.on("message", function (message) {
       if (message.keypair) {
